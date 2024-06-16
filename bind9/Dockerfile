@@ -1,10 +1,13 @@
 #Base Bind9 Image
-FROM ubuntu
+FROM ubuntu:latest
 
 USER root
 
 #Update and upgrade installed system pacakges
 RUN apt-get update && apt-get -y upgrade
+
+RUN userdel -r ubuntu && \
+    useradd bind
 
 #Install required tools and dependencies
 RUN apt install -y \
@@ -15,15 +18,15 @@ RUN apt install -y \
         geoip-bin \
         net-tools
 
-RUN mkdir -p /run/named \
-        && chown bind:bind /run/named
+RUN mkdir -p /run/named && \
+    chown bind:bind /run/named
 
 # Expose Ports
 EXPOSE 53/tcp
 EXPOSE 53/udp
 
 LABEL maintainer="Darrell Dudics <darrell@radtechdad.com>" \
-      version="1.0"
+      version="1.1"
 
 USER bind
 
